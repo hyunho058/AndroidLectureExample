@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.androidlectureexample">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".BroadcastNotificationActivity"></activity>
+
+        <receiver
+            android:name=".SUbBroadcastSMS"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".BroadcastSMSActivity" />
+        <activity android:name=".BroadcastReceiverActivity" />
+
+        <service
+            android:name=".SubKakaoBookSearchSearvice"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".KakaoBookSearchActivity" />
+
+        <service
+            android:name=".SubServiceDataTransferActivity"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".ServiceDataTransferActivity" />
+
+        <service
+            android:name=".SubServiceLifecycle"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".ServiceLifecycleActivity" />
+        <activity android:name=".SubImplicitIntent">
+            <intent-filter>
+                <action android:name="MyAction" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="IntentTest" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ImplicitIntent" />
+        <activity android:name=".DetailBookSearchActivity" />
+        <activity android:name=".BookInfor" />
+        <activity android:name=".BookSearchActivity" />
+        <activity android:name=".CounterHandlerActivity" />
+        <activity android:name=".CounterProgressActivity" />
+        <activity android:name=".CounterLogActivity" />
+        <activity android:name=".ANRActivity" />
+        <activity android:name=".DataFromActivity" />
+        <activity android:name=".SendMassageActivity" />
+        <activity android:name=".SwipeActivity" />
+        <activity android:name=".TouchEvent" />
+        <activity android:name=".EvnetActivity" />
+        <activity android:name=".WidgetActivity" />
+        <activity android:name=".LayoutActivity" />
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
