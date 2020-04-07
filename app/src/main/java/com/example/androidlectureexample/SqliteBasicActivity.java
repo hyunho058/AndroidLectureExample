@@ -113,7 +113,6 @@ public class SqliteBasicActivity extends AppCompatActivity {
 
                             tvEmpInfo.append(result+"\n");
                         }
-
                     }
                     break;
             }

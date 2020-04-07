@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnSMS;
     Button btnNotification;
     Button btnSQLite;
+    Button btnSQLiteHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
         btnNotification.setOnClickListener(mClick);
         btnSQLite=findViewById(R.id.btnSQLite);
         btnSQLite.setOnClickListener(mClick);
+        btnSQLiteHelper=findViewById(R.id.btnSQLiteHelper);
+        btnSQLiteHelper.setOnClickListener(mClick);
 
         btnActivityEvent = findViewById(R.id.btnActivityEvent);
         btnActivityEvent.setOnClickListener(mClick);
@@ -192,6 +195,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.btnSQLite:
                     startActivity(new Intent(MainActivity.this, SqliteBasicActivity.class));
+                    break;
+                case R.id.btnSQLiteHelper:
+                    startActivity(new Intent(MainActivity.this, SqliteHelperActivity.class));
                     break;
             }
         }

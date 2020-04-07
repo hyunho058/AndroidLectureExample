@@ -123,5 +123,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="SQLite Basic"/>
+        <Button
+            android:id="@+id/btnSQLiteHelper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SQLite Helper"/>
+        
     </LinearLayout>
 </ScrollView>

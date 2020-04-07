@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".SqliteBasicActivity"></activity>
+        <activity android:name=".SqliteHelperActivity"></activity>
+        <activity android:name=".SqliteBasicActivity" />
         <activity android:name=".BroadcastNotificationActivity" />
 
         <receiver
