@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.ContentProvider;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnNotification;
     Button btnSQLite;
     Button btnSQLiteHelper;
+    Button btnContentProvider;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
         btnSQLite.setOnClickListener(mClick);
         btnSQLiteHelper=findViewById(R.id.btnSQLiteHelper);
         btnSQLiteHelper.setOnClickListener(mClick);
+        btnContentProvider=findViewById(R.id.btnContentProvider);
+        btnContentProvider.setOnClickListener(mClick);
 
         btnActivityEvent = findViewById(R.id.btnActivityEvent);
         btnActivityEvent.setOnClickListener(mClick);
@@ -198,6 +202,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.btnSQLiteHelper:
                     startActivity(new Intent(MainActivity.this, SqliteHelperActivity.class));
+                    break;
+                case R.id.btnContentProvider:
+                    startActivity(new Intent(MainActivity.this, ContentProviderActivity.class));
                     break;
             }
         }
