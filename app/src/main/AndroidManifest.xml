@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".BroadcastNotificationActivity"></activity>
+        <activity android:name=".SqliteBasicActivity"></activity>
+        <activity android:name=".BroadcastNotificationActivity" />
 
         <receiver
             android:name=".SUbBroadcastSMS"

@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnBroadcastReceiver;
     Button btnSMS;
     Button btnNotification;
+    Button btnSQLite;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
         btnSMS.setOnClickListener(mClick);
         btnNotification=findViewById(R.id.btnNotification);
         btnNotification.setOnClickListener(mClick);
+        btnSQLite=findViewById(R.id.btnSQLite);
+        btnSQLite.setOnClickListener(mClick);
 
         btnActivityEvent = findViewById(R.id.btnActivityEvent);
         btnActivityEvent.setOnClickListener(mClick);
@@ -186,6 +189,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.btnNotification:
                     startActivity(new Intent(MainActivity.this, BroadcastNotificationActivity.class));
+                    break;
+                case R.id.btnSQLite:
+                    startActivity(new Intent(MainActivity.this, SqliteBasicActivity.class));
                     break;
             }
         }
