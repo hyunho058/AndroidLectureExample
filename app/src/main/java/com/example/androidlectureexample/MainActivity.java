@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnSQLite;
     Button btnSQLiteHelper;
     Button btnContentProvider;
+    Button btnContact;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
         btnSQLiteHelper.setOnClickListener(mClick);
         btnContentProvider=findViewById(R.id.btnContentProvider);
         btnContentProvider.setOnClickListener(mClick);
+        btnContact=findViewById(R.id.btnContact);
+        btnContact.setOnClickListener(mClick);
 
         btnActivityEvent = findViewById(R.id.btnActivityEvent);
         btnActivityEvent.setOnClickListener(mClick);
@@ -205,6 +208,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.btnContentProvider:
                     startActivity(new Intent(MainActivity.this, ContentProviderActivity.class));
+                    break;
+                case R.id.btnContact:
+                    startActivity(new Intent(MainActivity.this, ContactActivity.class));
                     break;
             }
         }

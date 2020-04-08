@@ -133,6 +133,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="ContentProvider"/>
+        <Button
+            android:id="@+id/btnContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="주소록 데이터 사용"/>
 
     </LinearLayout>
 </ScrollView>

@@ -3,8 +3,10 @@ package com.example.androidlectureexample;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
@@ -57,6 +59,29 @@ public class ContentProviderActivity extends AppCompatActivity {
                     getContentResolver().insert(uri,values);
                     Log.v(TAG,"데이터 입력");
                     break;
+                case R.id.btnEmpCall:
+                    //select code
+                    Log.v(TAG,"onClick()_DB Test");
+                    //1.DB 처리 기능을 제공하는 Content Provider를 찾는다
+                    //Content Provider를 찾기 위한 URI가 있어야한다
+                    String uriString1 = "content://com.exam.person.provider/person";
+                    Uri uri1 = new Uri.Builder().build().parse(uriString1);
+                    //2. uri를 이용해서 Content provider를 찾아서 특정 method를 호출
+                    //column을 표현하기 위한 String[]을 생성
+                    // select name, age, mobile from person where xxxx
+                    String[] columns = new String[]{"name","age","mobile"};
+                    //(uri, column, selection, selectionArgc, 정렬 방향)
+                    Cursor cursor = getContentResolver().query(
+                            uri1, columns, null, null,"name ASC");
+                    //성공하면 Database table에서 결과 record의 집합을 가져옴
+                    while (cursor.moveToNext()){
+                        String name = cursor.getString(0);
+                        int age = cursor.getInt(1);
+                        String mobile = cursor.getString(2);
+                        String result = "record ="+name+","+age+","+mobile+"\n";
+                        tvEmpInfo.append(result);
+                    }
+                    break;
             }
         }
     };
@@ -65,7 +90,7 @@ public class ContentProviderActivity extends AppCompatActivity {
 class PersonDatabaseHelper extends SQLiteOpenHelper{
     String TAG="PersonDatabaseHelper";
 
-    public PersonDatabaseHelper(@Nullable Context context) {
+    public PersonDatabaseHelper(@Nullable Context context){
         super(context, "person.db", null, 2);
     }
 
@@ -75,7 +100,8 @@ class PersonDatabaseHelper extends SQLiteOpenHelper{
         //Database가 초기에 만들어지는 시점에 Table 을 같이 만든다.
         //DB Create Code
         //SQL을 이용해서 Database안에 Table 생성
-        String sql = "CREATE TABLE IF NOT EXISTS " +"person(_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, age INTEGER, mobile TEXT)";
+        String sql = "CREATE TABLE IF NOT EXISTS " +"person(" +
+                "_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, age INTEGER, mobile TEXT)";
         //SQL을 어떤 database에서 실행할지 결정
         db.execSQL(sql);
         Log.v(TAG,"Table생성");

@@ -53,8 +53,16 @@ public class SubContentProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        // TODO: Implement this to handle query requests from clients.
-        throw new UnsupportedOperationException("Not yet implemented");
+        // 1 번쨰 인자 = table 명 ,
+        // 2 번째 인자 = projection(select에서 가져올 컬렴명을 문자열로 표현)
+        // 3 번째 인자 = selection(where절 조건 명시)
+        // 4 번째 인자 = selection 의 In Parameter의 값
+        // 5 번째 인자 = groun by
+        // 6 번째 인자 = having절
+        // 7 번째 인자 = wjdfuf qkdqjq
+        Cursor cursor = sqLiteDatabase.query(
+                "person", projection, selection, selectionArgs,null,null, sortOrder);
+        return cursor;
     }
 
     @Override
