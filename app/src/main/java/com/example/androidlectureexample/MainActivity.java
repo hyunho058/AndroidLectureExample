@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnSQLiteHelper;
     Button btnContentProvider;
     Button btnContact;
+    Button btnSerialConn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
         btnContentProvider.setOnClickListener(mClick);
         btnContact=findViewById(R.id.btnContact);
         btnContact.setOnClickListener(mClick);
+        btnSerialConn=findViewById(R.id.btnSerialConn);
+        btnSerialConn.setOnClickListener(mClick);
 
         btnActivityEvent = findViewById(R.id.btnActivityEvent);
         btnActivityEvent.setOnClickListener(mClick);
@@ -113,10 +116,10 @@ public class MainActivity extends AppCompatActivity {
                     intent.setComponent(cname);
                     startActivity(intent);
                     break;
-                case R.id.btn_widget:
-                    Log.v(TAG,"onClick_btn_widget"+btn_widget);
-                    startActivity(new Intent(MainActivity.this, WidgetActivity.class));
-                    break;
+//                case R.id.btn_widget:
+//                    Log.v(TAG,"onClick_btn_widget"+btn_widget);
+//                    startActivity(new Intent(MainActivity.this, WidgetActivity.class));
+//                    break;
                 case R.id.btn_image:
                     startActivity(new Intent(MainActivity.this, EvnetActivity.class));
                     break;
@@ -211,6 +214,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.btnContact:
                     startActivity(new Intent(MainActivity.this, ContactActivity.class));
+                    break;
+                case R.id.btnSerialConn:
+                    startActivity(new Intent(MainActivity.this, SerialPortClientActivity.class));
                     break;
             }
         }

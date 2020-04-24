@@ -138,6 +138,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="주소록 데이터 사용"/>
+        <Button
+            android:id="@+id/btnSerialConn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SerialCommunication"/>
 
     </LinearLayout>
 </ScrollView>
