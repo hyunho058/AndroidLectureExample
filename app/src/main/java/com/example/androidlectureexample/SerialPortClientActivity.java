@@ -3,6 +3,7 @@ package com.example.androidlectureexample;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,28 +13,63 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
+import java.util.LinkedList;
 
 public class SerialPortClientActivity extends AppCompatActivity {
     String TAG = "SerialPortClientActivity";
-    TextView tvLED;
+    //Compon
+    TextView tvStatus;
     Button btnOn;
     Button btnOff;
-    Button btnConn;
-
+    //Connection Variable
     Socket socket;
-    PrintWriter printWriter;
     BufferedReader bufferedReader;
-    Receiverunnable runnable;
+    PrintWriter printWriter;
+    final SharedObject sharedObject = new SharedObject();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_serial_port_client);
-        tvLED = findViewById(R.id.tvLED);
-        btnConn=findViewById(R.id.btnConn);
-        btnConn.setOnClickListener(mClick);
+        //공용 객체 생성
+
+
+        /**
+         * Java Network Server Connection
+         * 'Activity(UI Thread)'에서 Network 처리코드를 사용할수 없다.*
+         * 별도의 Thread를 이용해서 Connection 처리
+         * 1.Runnable Object Create
+         * 2.Thread 객체를 생성후 실행
+         */
+        //1Runnable Object Create
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    socket = new Socket("70.12.60.100",1234);
+                    bufferedReader = new BufferedReader(
+                            new InputStreamReader(socket.getInputStream()));
+                    printWriter = new PrintWriter(socket.getOutputStream());
+                    Log.v(TAG,"Connection Socket== "+socket.isConnected());
+                    //데이터를 넘겨주는 걸 반복적으로 진행
+                    while (true){
+                        String msg = sharedObject.pop();
+                        printWriter.println(msg);
+                        printWriter.flush();
+                    }
+
+                } catch (IOException e) {
+                    Log.v(TAG,"Connection Socket_IOException=="+e);
+                    e.printStackTrace();
+                }
+            }
+        });
+        //2Thread 객체를 생성후 실행
+        thread.start();
+
+        tvStatus = findViewById(R.id.tvStatus);
         btnOn = findViewById(R.id.btnOn);
         btnOn.setOnClickListener(mClick);
         btnOff = findViewById(R.id.btnOff);
@@ -43,84 +79,61 @@ public class SerialPortClientActivity extends AppCompatActivity {
     View.OnClickListener mClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            Log.v(TAG, "onClick==" + v.getId());
             switch (v.getId()) {
-                case R.id.btnConn:
-                    Log.v(TAG,"onClick()== "+btnConn.getText());
-                    Thread thread1 = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                socket = new Socket("70.12.60.100",5566);
-                                printWriter = new PrintWriter(socket.getOutputStream());
-                                bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream())); // 입력
-                                Log.v(TAG,"onClick()== ConnSuccess");
-                                runnable = new Receiverunnable(bufferedReader);
-                                Thread thread = new Thread(runnable);
-                                thread.start();
-                            } catch (UnknownHostException e1) {
-                                Log.v(TAG," UnknownHostException=="+e1);
-                                e1.printStackTrace();
-                            } catch (IOException e1) {
-                                Log.v(TAG," IOException=="+e1);
-                                e1.printStackTrace();
-                            }
-                        }
-                    });
-                    thread1.start();
-                    break;
                 case R.id.btnOn:
-                    Thread tt = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            printWriter.println(btnOn.getText());
-                            printWriter.flush();
-                            Log.v(TAG,"printWriter_Click =="+btnOn.getText());
-                            tvLED.setText("LED ON");
-                        }
-                    });
-                    tt.start();
+                    //Thread가 사용하는 곡용객체를 이용해서 메시지 전달
+                    //공용객체에 데이터 입력
+                    sharedObject.put("ON");
                     break;
                 case R.id.btnOff:
-                    Thread ttt = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            printWriter.println(btnOff.getText());
-                            printWriter.flush();
-                            Log.v(TAG,"printWriter_Click =="+btnOn.getText());
-                            tvLED.setText("LED OFF");
-                        }
-                    });
-                    ttt.start();
+                    sharedObject.put("OFF");
                     break;
             }
         }
     };
-    class Receiverunnable implements Runnable {
-        BufferedReader bufferedReader;
+    //Thread가 사용할 공용객체를 만들기 위한 class
+    class SharedObject{
+        Object monitor = new Object();
+        LinkedList<String>list = new LinkedList<>();
 
-        Receiverunnable(BufferedReader bufferedReader) {
-            this.bufferedReader = bufferedReader;
+        public void put(String line){
+            synchronized (monitor){
+                list.addLast(line); // LinkedList 끝에 데이터를 넣는다
+                Log.v(TAG,"SharedObject_put()=="+line);
+                monitor.notify(); //가지고 있는 모니터를 놔주고 wait()이 풀리면서 코드 진행
+            }
+        }
+        public String pop(){
+            String result = "";
+            synchronized (monitor){
+                if (list.isEmpty()){
+                    //list안에 문자열이 없으니까 일시 대기 (데이터가 들어올떄까지 대기)
+                    //Monitor 를 이용한 wait()을 이용해 일시정지(Locking)
+                    try {
+                        monitor.wait(); //모니터를 잡고있다고 wait()이 걸리면 모니터를 놓고 모니터에 대해 notify() 가 올떄까지 기다린다
+                        result = list.removeFirst(); // 큐구조이기 때문에 앞에 데이터를 빼간다
+                    }catch (InterruptedException e){
+                        Log.v(TAG,"InterruptedException=="+e);
+                    }
+                }else {
+                    result = list.removeFirst();
+                    Log.v(TAG,"SharedObject_put()=="+list);
+                }
+            }
+            return result;
+        }
+    }
+
+    class CommunicationRunnable implements Runnable{
+        String line = "";
+        CommunicationRunnable(String line){
+            this.line=line;
         }
         @Override
         public void run() {
-            Log.v(TAG, "SerialRunnable_num()");
-            String msg = "";
-            try {
-                while (true) {
-                    msg = bufferedReader.readLine();
-                    Log.v(TAG,"SerialRunnable_num()_msg============"+msg);
-                    if (msg == "0") {
-                        tvLED.setText("LED OFF");
-                        continue;
-                    }
-                    if(msg == "1") {
-                        tvLED.setText("LED ON");
-                        continue;
-                    }
-                }
-            } catch (IOException e) {
-                Log.v(TAG,"run()_IOException=="+e);
-            }
+            printWriter.println(line);
+            printWriter.flush();
         }
     }
 }

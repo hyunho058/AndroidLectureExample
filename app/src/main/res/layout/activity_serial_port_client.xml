@@ -5,15 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".SerialPortClientActivity">
-    <Button
-        android:id="@+id/btnConn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ServerConn"/>
+
     <TextView
-        android:id="@+id/tvLED"
+        android:id="@+id/tvStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:textSize="35sp"/>
     <Button
         android:id="@+id/btnOn"
