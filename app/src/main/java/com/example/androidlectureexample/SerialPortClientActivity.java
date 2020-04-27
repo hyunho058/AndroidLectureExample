@@ -53,13 +53,14 @@ public class SerialPortClientActivity extends AppCompatActivity {
                             new InputStreamReader(socket.getInputStream()));
                     printWriter = new PrintWriter(socket.getOutputStream());
                     Log.v(TAG,"Connection Socket== "+socket.isConnected());
+                    Thread thread1 = new Thread(new ReceiveRunnable(bufferedReader));
+                    thread1.start();
                     //데이터를 넘겨주는 걸 반복적으로 진행
                     while (true){
                         String msg = sharedObject.pop();
                         printWriter.println(msg);
                         printWriter.flush();
                     }
-
                 } catch (IOException e) {
                     Log.v(TAG,"Connection Socket_IOException=="+e);
                     e.printStackTrace();
@@ -117,23 +118,42 @@ public class SerialPortClientActivity extends AppCompatActivity {
                         Log.v(TAG,"InterruptedException=="+e);
                     }
                 }else {
+                    Log.v(TAG,"SharedObject_pop()=="+list.getFirst());
                     result = list.removeFirst();
-                    Log.v(TAG,"SharedObject_put()=="+list);
                 }
             }
             return result;
         }
     }
 
-    class CommunicationRunnable implements Runnable{
-        String line = "";
-        CommunicationRunnable(String line){
-            this.line=line;
+    public class ReceiveRunnable implements Runnable {
+        BufferedReader bufferedReader;
+
+        ReceiveRunnable(BufferedReader bufferedReader) {
+            this.bufferedReader = bufferedReader;
         }
+
         @Override
         public void run() {
-            printWriter.println(line);
-            printWriter.flush();
+            String msg = "";
+            try {
+                while (true) {
+                    msg = bufferedReader.readLine();
+                    Log.v(TAG,"ReceiveRunnable_msg== "+msg);
+                    if (msg.equals("ON")) {
+                        Log.v(TAG,"ReceiveRunnable_msg== "+msg);
+                        tvStatus.setText("켜졋다네??");
+                        continue;
+                    }
+                    if (msg.equals("OFF")) {
+                        Log.v(TAG,"ReceiveRunnable_msg== "+msg);
+                        tvStatus.setText("OFF??");
+                        continue;
+                    }
+                }
+            }catch (IOException e){
+                Log.v(TAG,"ReceiveRunnable_IOException== "+e);
+            }
         }
     }
 }
