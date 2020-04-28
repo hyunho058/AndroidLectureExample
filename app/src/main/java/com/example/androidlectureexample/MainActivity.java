@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnContentProvider;
     Button btnContact;
     Button btnSerialConn;
+    Button btnVariableLed;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
         btnContact.setOnClickListener(mClick);
         btnSerialConn=findViewById(R.id.btnSerialConn);
         btnSerialConn.setOnClickListener(mClick);
+        btnVariableLed=findViewById(R.id.btnVariableLed);
+        btnVariableLed.setOnClickListener(mClick);
 
         btnActivityEvent = findViewById(R.id.btnActivityEvent);
         btnActivityEvent.setOnClickListener(mClick);
@@ -217,6 +220,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.btnSerialConn:
                     startActivity(new Intent(MainActivity.this, SerialPortClientActivity.class));
+                    break;
+                case R.id.btnVariableLed:
+                    startActivity(new Intent(MainActivity.this, VariableLedActivity.class));
                     break;
             }
         }

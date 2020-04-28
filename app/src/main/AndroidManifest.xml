@@ -23,10 +23,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".VariableLedActivity"></activity>
+
         <service
             android:name=".SerialPortService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <activity android:name=".SerialPortClientActivity" />
         <activity android:name=".ContactActivity" />
